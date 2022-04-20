@@ -1,7 +1,7 @@
 package NoteBackEnd;
 
 import java.time.*;
-import java.util.ArrayList;
+import java.util.*;
 
 public class NotesList {
 	private ArrayList<Note> notes;
@@ -56,5 +56,9 @@ public class NotesList {
 	
 	public int searchNote(String key) {
 		return 0;
+	}
+	
+	public int size() {
+		return notes.size();
 	}
 }

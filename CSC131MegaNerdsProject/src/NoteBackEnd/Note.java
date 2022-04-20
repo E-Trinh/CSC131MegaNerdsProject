@@ -1,6 +1,5 @@
 package NoteBackEnd;
 
-import java.util.*;
 import java.time.*;
 
 public class Note implements NoteComposite {
