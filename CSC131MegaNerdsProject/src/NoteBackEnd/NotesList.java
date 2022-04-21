@@ -61,4 +61,8 @@ public class NotesList {
 	public int size() {
 		return notes.size();
 	}
+	
+	public Iterator<Note> iterator() {
+		return notes.iterator();
+	}
 }
