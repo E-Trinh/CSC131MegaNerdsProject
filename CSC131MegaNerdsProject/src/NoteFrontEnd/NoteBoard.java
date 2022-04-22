@@ -1,7 +1,6 @@
 package NoteFrontEnd;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import NoteBackEnd.*;
@@ -22,9 +21,9 @@ public class NoteBoard extends JPanel{
 		grid.setColumns(1);
 		grid.setRows(data.size());
 		this.setLayout(grid);
-		ArrayList<Button> noteBtn = new ArrayList<Button>();
+		ArrayList<NoteButton> noteBtn = new ArrayList<NoteButton>();
 		for (int i = 0; i < data.size(); i++) {
-			noteBtn.add(new Button(data.get(i).getTitle()));
+			noteBtn.add(new NoteButton(data.get(i)));
 			this.add(noteBtn.get(i));
 		}
 	}

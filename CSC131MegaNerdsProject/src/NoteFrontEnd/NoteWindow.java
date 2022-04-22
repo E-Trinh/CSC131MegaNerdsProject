@@ -20,7 +20,7 @@ public class NoteWindow extends JFrame {
 		Container notePane;
 		notePane = getContentPane();
 		this.setLayout(new BorderLayout());
-		NoteBoard board = new NoteBoard(data);
-		notePane.add(board);
+		NoteTabPane tabPane = new NoteTabPane(data);
+		notePane.add(tabPane);
 	}
 }
