@@ -7,10 +7,16 @@ import java.util.*;
 import javax.swing.*;
 import NoteBackEnd.*;
 
+/*
+ * NoteBoard extends JPanel
+ * Contains the GUI panel for the list of active notes
+ */
+
 public class NoteBoard extends JPanel{
 	
 	//contains a reference to the NotesList list
 	private NotesList data;
+	
 	//used for storing the two sets of button
 	private ArrayList<NoteButton> noteBtn = new ArrayList<NoteButton>();
 	private ArrayList<Button> delete = new ArrayList<Button>();
@@ -23,7 +29,7 @@ public class NoteBoard extends JPanel{
 		this.setVisible(true);
 	}
 	
-	//returns and accepts nothing, used for initial setup of the frame
+	//returns and accepts nothing, used for initial layout setup of the frame
 	public void setupLayout() {
 		//initializing and setting up a grid layout manager;
 		GridLayout grid = new GridLayout(0, 2);
@@ -79,8 +85,20 @@ public class NoteBoard extends JPanel{
 					noteBtn.get(i).setLabel(data.get(i).getTitle());
 				} else {
 					noteBtn.add(new NoteButton(data.get(i)));
-					delete.add(new Button("Delete"));
 					this.add(noteBtn.get(i));
+					delete.add(new Button("Recycle"));
+					
+					//adds ActionListener with anonymous method for recycling the note that matches with the button index
+					delete.get(i).addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							int deleteResult = JOptionPane.showConfirmDialog(null, "Recycle this note?");
+							if (deleteResult == JOptionPane.YES_OPTION) {
+								int buttonIndex = delete.indexOf(e.getSource());
+								data.recycleNote(buttonIndex);
+								refresh();
+							}
+						}
+					});
 					this.add(delete.get(i));
 					this.revalidate();
 				}
@@ -89,7 +107,7 @@ public class NoteBoard extends JPanel{
 		//when there are more pair of buttons than notes, sets the title to the corresponding buttons and removes the extra
 			ArrayList<Integer> nums = new ArrayList<Integer>();
 			for (int i = 0; i < noteBtn.size(); i++) {
-				if (i < noteBtn.size()) {
+				if (i < data.size()) {
 					noteBtn.get(i).setLabel(data.get(i).getTitle());
 				} else {
 					//adds the index of items that need to removed, the items are removed in reverse order
@@ -97,11 +115,12 @@ public class NoteBoard extends JPanel{
 				}
 			}
 			//removing the buttons from the frame and lists
-			for (int i = nums.size() - 1; i > 0; i--) {
-				this.remove(noteBtn.get(i));
-				this.remove(delete.get(i));
-				noteBtn.remove(i);
-				delete.remove(i);
+			for (int i = nums.size() - 1; i >= 0; i--) {
+				int num = nums.get(i);
+				this.remove(noteBtn.get(num));
+				this.remove(delete.get(num));
+				noteBtn.remove(num);
+				delete.remove(num);
 			}
 		}
 	}

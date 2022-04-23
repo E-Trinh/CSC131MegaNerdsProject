@@ -8,10 +8,5 @@ public class Dashboard extends JPanel{
 	
 	public Dashboard(NotesList data) {
 		this.data = data;
-		setupLayout();
-	}
-	
-	public void setupLayout() {
-		
 	}
 }

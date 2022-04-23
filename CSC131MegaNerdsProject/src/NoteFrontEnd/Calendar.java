@@ -9,10 +9,5 @@ public class Calendar extends JPanel {
 	
 	public Calendar(NotesList data) {
 		this.data = data;
-		setupLayout();
-	}
-	
-	public void setupLayout() {
-		
 	}
 }
