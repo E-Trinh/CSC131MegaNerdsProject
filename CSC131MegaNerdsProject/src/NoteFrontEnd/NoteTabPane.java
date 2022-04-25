@@ -17,6 +17,7 @@ public class NoteTabPane extends JTabbedPane implements ChangeListener{
 	private Dashboard dash;
 	private Calendar calendar;
 	private RecyclePane archive;
+	private Search search;
 	
 	//constructor, accepts reference to NoteList object, creates new instance of NoteTabPane
 	public NoteTabPane(NotesList data) {
@@ -25,10 +26,12 @@ public class NoteTabPane extends JTabbedPane implements ChangeListener{
 		dash = new Dashboard(data);
 		calendar = new Calendar(data);
 		archive = new RecyclePane(data);
+		search = new Search(data);
 		this.add("Dashboard", dash);
 		this.add("Notes", noteBoard);
 		this.add("Calendar", calendar);
 		this.add("Archive", archive);
+		this.add("Search", search);
 		this.addChangeListener(this);
 	}
 

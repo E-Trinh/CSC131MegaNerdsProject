@@ -2,6 +2,7 @@ package NoteBackEnd;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /* Class: NotesList
  * Contains the list of Note objects for both the active notes and recycle bin
@@ -59,6 +60,11 @@ public class NotesList {
 		}
 	}
 	
+	//removes note directly from note array; skips recycleBin
+	public void directDelete(int index) {
+	        notes.remove(index);
+	}
+	
 	//no return value, accepts an int, moves the reference to the Note at the index from the notes list to the recycleBin list
 	public void recycleNote(int index) {
 		recycleBin.add(notes.get(index));
@@ -88,8 +94,9 @@ public class NotesList {
 	}
 	
 	//method stub, not implemented yet
-	public int searchNote(String key) {
-		return 0;
+	public ArrayList<Note> searchNote(String key) {
+	        List<Note> filtered = notes.stream().filter(n->n.getTitle().contains(key)).collect(Collectors.toList());
+		return (ArrayList<Note>) filtered;
 	}
 	
 	//no parameter, returns an int for the size of the  notes list
