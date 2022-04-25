@@ -17,6 +17,12 @@ public class RecyclePane extends JPanel{
 	//contains a reference to the NotesList list
 	private NotesList data;
 	
+	//int used for storing the current page number
+	private int pageNumber = 0;
+	
+	//int used for the number of notes on each page
+	private int notePerPage = 10;
+	
 	//used for storing the two sets of buttons
 	private ArrayList<Button> restoreBtn = new ArrayList<Button>();
 	private ArrayList<Button> deleteBtn = new ArrayList<Button>();
@@ -41,11 +47,12 @@ public class RecyclePane extends JPanel{
 		Label titleLabel = new Label("Notes");
 		titleLabel.setBackground(Color.yellow);
 		titleLabel.setAlignment(Label.CENTER);
-		Button newNote = new Button("Clear All Notes");
-		newNote.setBackground(Color.green);
+		this.add(titleLabel);
 		
+		Button clearNote = new Button("Clear All Notes");
+		clearNote.setBackground(Color.green);
 		//Adds ActionListener with anonymous method for deleting all notes from the recycle bin
-		newNote.addActionListener(new ActionListener() {
+		clearNote.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//if the user presses yes on the dialog box, takes the data from the box and creates a new Note
 				int deleteNoteDialog = JOptionPane.showConfirmDialog(null, "Clear archive? All items will no be recoverable.");
@@ -57,70 +64,84 @@ public class RecyclePane extends JPanel{
 				}
 			}
 		});
+		this.add(clearNote);
 		
-		this.add(titleLabel);
-		this.add(newNote);
+		//instantiating needed buttons
+		for (int i = 0; i < notePerPage; i++) {
+			restoreBtn.add(new NoteButton());
+			restoreBtn.get(i).setVisible(false);
+			//Adds ActionListener with anonymous method for restoring the note that matches with the corresponding button index
+			restoreBtn.get(i).addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int restoreResult = JOptionPane.showConfirmDialog(null, "Restore this note?");
+					if (restoreResult == JOptionPane.YES_OPTION) {
+						int buttonIndex = restoreBtn.indexOf(e.getSource())  + pageNumber * notePerPage;
+						data.restoreNote(buttonIndex);
+						refresh();
+					}
+				}
+			});
+			
+			deleteBtn.add(new Button("Recycle"));
+			deleteBtn.get(i).setVisible(false);
+			//adds ActionListener with anonymous method for recycling the note that matches with the button index
+			deleteBtn.get(i).addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int deleteResult = JOptionPane.showConfirmDialog(null, "Delete this note? Note will no longer be recoverable");
+					if (deleteResult == JOptionPane.YES_OPTION) {
+						int buttonIndex = deleteBtn.indexOf(e.getSource()) + pageNumber * notePerPage;
+						data.delete(buttonIndex);
+						refresh();
+					}
+				}
+			});
+			
+			this.add(restoreBtn.get(i));
+			this.add(deleteBtn.get(i));
+		}
+		
+		Button forwardPage = new Button("Forward");
+		//adds ActionListener with anonymous method for showing the next page of notes
+		forwardPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if ((pageNumber + 1) * notePerPage < data.recycleBinSize()) {
+					pageNumber++;
+					updateButton();
+				}
+			}
+		});
+		//adds ActionListener with anonymous method for showing the next page of notes
+		Button previousPage = new Button("Back");
+		previousPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (pageNumber > 0) {
+					pageNumber--;
+					updateButton();
+				}
+			}
+		});
+		this.add(previousPage);
+		this.add(forwardPage);
 		refresh();
 	}
 	
 	//returns and accepts void, used for refreshing all the components in the frame
 	public void refresh() {
-		if (data.recycleBinSize() > restoreBtn.size()) {
-			for (int i = 0; i < data.recycleBinSize(); i++) {
-				if (i < restoreBtn.size()) {
-					restoreBtn.get(i).setLabel(data.recycleBinGet(i).getTitle());
-				} else {
-					//Adding additional buttons for recycled notes that do not have buttons
-					restoreBtn.add(new Button(data.recycleBinGet(i).getTitle()));
-					this.add(restoreBtn.get(i));
-					
-					//Adds ActionListener with anonymous method for restoring the note that matches with the corresponding button index
-					restoreBtn.get(i).addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							int restoreResult = JOptionPane.showConfirmDialog(null, "Restore this note?");
-							if (restoreResult == JOptionPane.YES_OPTION) {
-								int buttonIndex = restoreBtn.indexOf(e.getSource());
-								data.restoreNote(buttonIndex);
-								refresh();
-							}
-						}
-					});
-					deleteBtn.add(new Button("Delete"));
-					
-					//Adds ActionListener with anonymous method for deleting the note that matches with the corresponding button index
-					deleteBtn.get(i).addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							int deleteResult = JOptionPane.showConfirmDialog(null, "Delete this note? Note will no longer be recoverable");
-							if (deleteResult == JOptionPane.YES_OPTION) {
-								int buttonIndex = deleteBtn.indexOf(e.getSource());
-								data.delete(buttonIndex);
-								refresh();
-							}
-						}
-					});
-					this.add(deleteBtn.get(i));
-				}
-			} 
-		} else {
-		//when there are more pair of buttons than notes, sets the title to the corresponding buttons and removes the extra buttons
-			ArrayList<Integer> nums = new ArrayList<Integer>();
-			for (int i = 0; i < restoreBtn.size(); i++) {
-				if (i < data.recycleBinSize()) {
-					restoreBtn.get(i).setLabel(data.recycleBinGet(i).getTitle());
-				} else {
-					//adds the index of items that need to removed, the items are removed in reverse order
-					nums.add(i);
-				}
-			}
-			//removing the buttons from the frame and lists
-			for (int i = nums.size() - 1; i >= 0; i--) {
-				int num = nums.get(i);
-				this.remove(restoreBtn.get(num));
-				this.remove(deleteBtn.get(num));
-				restoreBtn.remove(num);
-				deleteBtn.remove(num);
+		pageNumber = 0;
+		updateButton();
+	}
+	
+	//returns and accepts void, used for refreshing all the buttons in the panel
+	public void updateButton() {
+		for (int i = 0; i < notePerPage; i++) {
+			if (notePerPage * pageNumber + i < data.recycleBinSize()) {
+				restoreBtn.get(i).setLabel(data.recycleBinGet(notePerPage*pageNumber+i).getTitle());
+				restoreBtn.get(i).setVisible(true);
+				deleteBtn.get(i).setVisible(true);
+			} else {
+				restoreBtn.get(i).setVisible(false);
+				deleteBtn.get(i).setVisible(false);
 			}
 		}
-		this.revalidate();
 	}
 }
