@@ -17,9 +17,15 @@ public class NoteBoard extends JPanel{
 	//contains a reference to the NotesList list
 	private NotesList data;
 	
+	//int used for storing the current page number
+	private int pageNumber = 0;
+	
+	//int used for the number of notes on each page
+	private int notePerPage = 10;
+	
 	//used for storing the two sets of button
 	private ArrayList<NoteButton> noteBtn = new ArrayList<NoteButton>();
-	private ArrayList<Button> delete = new ArrayList<Button>();
+	private ArrayList<Button> recycleBtn = new ArrayList<Button>();
 	
 	//takes a reference to NotesList as parameter, constructor
 	public NoteBoard(NotesList data) {
@@ -37,12 +43,14 @@ public class NoteBoard extends JPanel{
 		//sets frame to use the grid layout manager previously created
 		this.setLayout(grid);
 		
-		//Setting up elements
+		//Setting up components
 		Label titleLabel = new Label("Notes");
 		titleLabel.setBackground(Color.yellow);
+		this.add(titleLabel);
+		
 		Button newNote = new Button("Create New Note");
 		newNote.setBackground(Color.green);
-		
+
 		//Adds anonymous method for event handling to create a new note
 		newNote.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -70,57 +78,67 @@ public class NoteBoard extends JPanel{
 				}
 			}
 		});
-		
-		this.add(titleLabel);
 		this.add(newNote);
+		
+		//instantiating needed buttons
+		for (int i = 0; i < notePerPage; i++) {
+			noteBtn.add(new NoteButton());
+			recycleBtn.add(new Button("Recycle"));
+			recycleBtn.get(i).setVisible(false);
+			//adds ActionListener with anonymous method for recycling the note that matches with the button index
+			recycleBtn.get(i).addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int deleteResult = JOptionPane.showConfirmDialog(null, "Recycle this note?");
+					if (deleteResult == JOptionPane.YES_OPTION) {
+						int buttonIndex = recycleBtn.indexOf(e.getSource()) + pageNumber * notePerPage;
+						data.recycleNote(buttonIndex);
+						refresh();
+					}
+				}
+			});
+			this.add(noteBtn.get(i));
+			this.add(recycleBtn.get(i));
+		}
+		
+		Button forwardPage = new Button("Forward");
+		//adds ActionListener with anonymous method for showing the next page of notes
+		forwardPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if ((pageNumber + 1) * notePerPage < data.size()) {
+					pageNumber++;
+					updateButton();
+				}
+			}
+		});
+		//adds ActionListener with anonymous method for showing the next page of notes
+		Button previousPage = new Button("Back");
+		previousPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (pageNumber > 0) {
+					pageNumber--;
+					updateButton();
+				}
+			}
+		});
+		this.add(previousPage);
+		this.add(forwardPage);
 		refresh();
 	}
 	
-	//returns and accepts void, used for refreshing all the components in the frame
 	public void refresh() {
-		//when there are more notes than pairs of button, sets the label of each button to the corresponding title and creates a new pair of button for notes without buttons
-		if (data.size() > noteBtn.size()) {
-			for (int i = 0; i < data.size(); i++) {
-				if (i < noteBtn.size()) {
-					noteBtn.get(i).setLabel(data.get(i).getTitle());
-				} else {
-					noteBtn.add(new NoteButton(data.get(i)));
-					this.add(noteBtn.get(i));
-					delete.add(new Button("Recycle"));
-					
-					//adds ActionListener with anonymous method for recycling the note that matches with the button index
-					delete.get(i).addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							int deleteResult = JOptionPane.showConfirmDialog(null, "Recycle this note?");
-							if (deleteResult == JOptionPane.YES_OPTION) {
-								int buttonIndex = delete.indexOf(e.getSource());
-								data.recycleNote(buttonIndex);
-								refresh();
-							}
-						}
-					});
-					this.add(delete.get(i));
-					this.revalidate();
-				}
-			}
-		} else {
-		//when there are more pair of buttons than notes, sets the title to the corresponding buttons and removes the extra
-			ArrayList<Integer> nums = new ArrayList<Integer>();
-			for (int i = 0; i < noteBtn.size(); i++) {
-				if (i < data.size()) {
-					noteBtn.get(i).setLabel(data.get(i).getTitle());
-				} else {
-					//adds the index of items that need to removed, the items are removed in reverse order
-					nums.add(i);
-				}
-			}
-			//removing the buttons from the frame and lists
-			for (int i = nums.size() - 1; i >= 0; i--) {
-				int num = nums.get(i);
-				this.remove(noteBtn.get(num));
-				this.remove(delete.get(num));
-				noteBtn.remove(num);
-				delete.remove(num);
+		pageNumber = 0;
+		updateButton();
+	}
+	
+	//returns and accepts void, used for refreshing all the buttons in the panel
+	public void updateButton() {
+		for (int i = 0; i < notePerPage; i++) {
+			if (notePerPage * pageNumber + i < data.size()) {
+				noteBtn.get(i).setNote(data.get(notePerPage*pageNumber+i));
+				recycleBtn.get(i).setVisible(true);
+			} else {
+				noteBtn.get(i).removeHide();
+				recycleBtn.get(i).setVisible(false);
 			}
 		}
 	}

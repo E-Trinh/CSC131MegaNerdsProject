@@ -15,6 +15,13 @@ public class NoteButton extends Button implements ActionListener{
 	//reference to the Note object the button corresponds with
 	private Note note;
 	
+	//defuault constructor
+	public NoteButton() {
+		super();
+		this.addActionListener(this);
+		this.setVisible(false);
+	}
+	
 	//constructor, accepts reference to Note object
 	public NoteButton(Note note) {
 		super();
@@ -23,6 +30,19 @@ public class NoteButton extends Button implements ActionListener{
 		this.addActionListener(this);
 	}
 	
+	//accepts Note and no return, setter method
+	public void setNote(Note note) {
+		this.note = note;
+		this.setLabel(note.getTitle());
+		this.setVisible(true);
+	}
+	
+	//no parameter and no return, removes reference to Note object and hides the object
+	public void removeHide() {
+		this.note = null;
+		this.setVisible(false);
+	}
+ 	
 	//accepts ActionEvent and no return, when the button is clicked opens a dialog box to edit the fields for the button
 	public void actionPerformed(ActionEvent e) {
 		//setting up a panel to pass to dialog box

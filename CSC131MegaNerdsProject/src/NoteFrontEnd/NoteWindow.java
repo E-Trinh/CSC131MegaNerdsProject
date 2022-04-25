@@ -24,7 +24,7 @@ public class NoteWindow extends JFrame {
 	
 	//no parameters and return, sets up the layout of the window
 	public void setupLayout() {
-		this.setSize(1000, 1000);
+		this.setSize(750, 750);
 		Container notePane;
 		notePane = getContentPane();
 		this.setLayout(new BorderLayout());
