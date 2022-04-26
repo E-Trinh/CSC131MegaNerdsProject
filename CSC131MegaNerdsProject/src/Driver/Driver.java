@@ -1,6 +1,5 @@
 package Driver;
 
-import NoteBackEnd.*;
 import NoteFrontEnd.*;
 
 /*
@@ -12,10 +11,8 @@ public class Driver {
 
 	//main method
 	public static void main(String[] args) {
-		//new note list
-		NotesList list = new NotesList();
 		//new Window
-		NoteWindow noteWindow = new NoteWindow(list);
+		NoteWindow noteWindow = new NoteWindow();
 		noteWindow.setVisible(true);
 	}
 }

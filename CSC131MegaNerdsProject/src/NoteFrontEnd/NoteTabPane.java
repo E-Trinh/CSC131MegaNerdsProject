@@ -37,7 +37,10 @@ public class NoteTabPane extends JTabbedPane implements ChangeListener{
 
 	//refreshing the panes within the NoteTabPane instance whenever the tab is switched
 	public void stateChanged(ChangeEvent e) {
-		noteBoard.refresh();
-		archive.refresh();
+		if (this.getSelectedComponent() instanceof NoteBoard) {
+			noteBoard.refresh();
+		} else if (this.getSelectedComponent() instanceof RecyclePane) {
+			archive.refresh();
+		}
 	}
 }

@@ -10,8 +10,7 @@ import NoteBackEnd.*;
  * NoteButton extends button implements ActionListener
  */
 
-public class NoteButton extends Button implements ActionListener
-{
+public class NoteButton extends Button implements ActionListener {
 	
 	//reference to the Note object the button corresponds with
 	private Note note;

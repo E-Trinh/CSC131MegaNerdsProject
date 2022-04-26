@@ -39,6 +39,17 @@ public class Note implements NoteComposite {
 		creation = LocalDateTime.now();
 	}
 	
+	//constructor, accepts 2 String, one Boolean, 3 LocalDateTime, package visibility
+	Note(String title, String text, LocalDateTime date, LocalDateTime lastModification, LocalDateTime creation, Boolean completed) {
+		this.title = title;
+		this.text = text;
+		this.date = date;
+		this.lastModification = lastModification;
+		this.creation = creation;
+		this.completed = completed;
+	}
+	
+	
 	//no parameters, returns String for the title of the Note
 	public String getTitle() {
 		return title;
@@ -49,8 +60,13 @@ public class Note implements NoteComposite {
 		return text;
 	}
 	
+	//no parameters, returns a Boolean for the completion status of the Note
+	public Boolean getCompleted() {
+		return completed;
+	}
+	
 	//no parameters, returns LocalDateTime for the date of the Note
-	public LocalDateTime getTime() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 	

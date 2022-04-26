@@ -1,25 +1,34 @@
 package NoteFrontEnd;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import NoteBackEnd.*;
-
 /*
  * NoteWindow extends JFrame
  * Window containing all components for GUI
  */
 
-public class NoteWindow extends JFrame {
+public class NoteWindow extends JFrame{
 	
 	//reference to the NotesList
 	private NotesList data;
 	
 	//constructor, accepts NoteList object and creates new NoteWindow object
-	public NoteWindow(NotesList data) {
+	public NoteWindow() {
 		super();
-		this.data = data;
-		setupLayout();
+		this.data = new NotesList();
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				data.exportNote();
+			}
+			
+			public void windowOpened(WindowEvent e) {
+				data.importNote();
+			}
+		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setupLayout();
 	}
 	
 	//no parameters and return, sets up the layout of the window
