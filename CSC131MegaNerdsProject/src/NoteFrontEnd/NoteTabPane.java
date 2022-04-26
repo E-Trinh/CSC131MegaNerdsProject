@@ -41,6 +41,8 @@ public class NoteTabPane extends JTabbedPane implements ChangeListener{
 			noteBoard.refresh();
 		} else if (this.getSelectedComponent() instanceof RecyclePane) {
 			archive.refresh();
+		} else if(this.getSelectedComponent() instanceof Search) {
+			search.refresh();
 		}
 	}
 }

@@ -165,7 +165,7 @@ public class NotesList implements Serializable{
 		notes = sortStrategy.sort(notes);
 	}
 	
-	//method stub, not implemented yet
+	//accepts a String and returns an ArrayList, filters notesList for elements that have a title that contain key
 	public ArrayList<Note> searchNote(String key) {
 	        List<Note> filtered = notes.stream().filter(n->n.getTitle().contains(key)).collect(Collectors.toList());
 		return (ArrayList<Note>) filtered;
