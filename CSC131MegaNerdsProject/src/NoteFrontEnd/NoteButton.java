@@ -10,7 +10,8 @@ import NoteBackEnd.*;
  * NoteButton extends button implements ActionListener
  */
 
-public class NoteButton extends Button implements ActionListener{
+public class NoteButton extends Button implements ActionListener
+{
 	
 	//reference to the Note object the button corresponds with
 	private Note note;
@@ -42,7 +43,7 @@ public class NoteButton extends Button implements ActionListener{
 		this.note = null;
 		this.setVisible(false);
 	}
- 	
+
 	//accepts ActionEvent and no return, when the button is clicked opens a dialog box to edit the fields for the button
 	public void actionPerformed(ActionEvent e) {
 		//setting up a panel to pass to dialog box
@@ -50,11 +51,16 @@ public class NoteButton extends Button implements ActionListener{
 		JLabel titleLabel = new JLabel("Title:");
 		JLabel textLabel = new JLabel("Text:");
 		JFormattedTextField titleBox = new JFormattedTextField(note.getTitle());
+		titleBox.setPreferredSize(new Dimension(100,100));
+		titleBox.setHorizontalAlignment(JTextField.LEFT);
 		JFormattedTextField textBox = new JFormattedTextField(note.getText());
+		textBox.setPreferredSize(new Dimension(100,100));
+		textBox.setHorizontalAlignment(JTextField.LEFT);
 		panel.add(titleLabel);
 		panel.add(titleBox);
 		panel.add(textLabel);
 		panel.add(textBox);
+		panel.setPreferredSize(new Dimension(500,500));
 		
 		//opens a dialog box with fields to allow the user to edit the Note
 		int noteEdit = JOptionPane.showConfirmDialog(this, panel);

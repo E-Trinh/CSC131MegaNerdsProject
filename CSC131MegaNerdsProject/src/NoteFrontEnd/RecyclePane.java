@@ -68,7 +68,7 @@ public class RecyclePane extends JPanel{
 		
 		//instantiating needed buttons
 		for (int i = 0; i < notePerPage; i++) {
-			restoreBtn.add(new NoteButton());
+			restoreBtn.add(new Button());
 			restoreBtn.get(i).setVisible(false);
 			//Adds ActionListener with anonymous method for restoring the note that matches with the corresponding button index
 			restoreBtn.get(i).addActionListener(new ActionListener() {
@@ -95,7 +95,6 @@ public class RecyclePane extends JPanel{
 					}
 				}
 			});
-			
 			this.add(restoreBtn.get(i));
 			this.add(deleteBtn.get(i));
 		}
