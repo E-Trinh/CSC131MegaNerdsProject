@@ -175,7 +175,10 @@ public class NotesList implements Serializable{
 	
 	//accepts a String and returns an ArrayList, filters notesList for elements that have a title that contain key
 	public ArrayList<Note> searchNote(String key) {
-	        List<Note> filtered = notes.stream().filter(n->n.getTitle().contains(key)).collect(Collectors.toList());
+	        List<Note> filtered = new ArrayList<Note>();
+	        if(key.length() > 0) {
+	                filtered = notes.stream().filter(n->n.getTitle().contains(key)).collect(Collectors.toList());
+	        }
 		return (ArrayList<Note>) filtered;
 	}
 	

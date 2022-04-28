@@ -29,7 +29,7 @@ public class NoteBoard extends JPanel{
 	//used for storing the two sets of button
 	private ArrayList<NoteButton> noteBtn = new ArrayList<NoteButton>();
 	private ArrayList<Button> recycleBtn = new ArrayList<Button>();
-	
+	private ArrayList<Note> filteredData = new ArrayList<Note>();
 	//takes a reference to NotesList as parameter, constructor
 	public NoteBoard(NotesList data) {
 		super();
@@ -90,9 +90,9 @@ public class NoteBoard extends JPanel{
 		});
 		
 		//Adding search bar navigation buttons
-        JTextField searchBar = new JTextField();
-        Button searchButton = new Button("Search");
-        Button clearhButton = new Button("Clear");
+		JTextField searchBar = new JTextField();
+		Button searchButton = new Button("Search");
+		Button clearhButton = new Button("Clear");
 		GridBagConstraints searchConstraints = new GridBagConstraints();
 		searchConstraints.gridx = 0;
 		searchConstraints.gridy = 1;
@@ -109,8 +109,20 @@ public class NoteBoard extends JPanel{
 		this.add(searchButton, searchConstraints);
 		searchConstraints.gridx = 3;
 		this.add(clearhButton, searchConstraints);
+		searchButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                filteredData = data.searchNote(searchBar.getText());
+                                searchRefresh();
+                        }
+                });
+		clearhButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                searchBar.setText("");
+                                refresh();
+                        }
+                });
 		
-        //new note and sort navigation buttons
+		//new note and sort navigation buttons
 		String[] sortMethods = {"A to Z", "Z to A", "Newest", "Oldest"};
 		JComboBox<String> sortBox = new JComboBox<String>(sortMethods);
 		GridBagConstraints constraintNew = new GridBagConstraints();
@@ -233,4 +245,18 @@ public class NoteBoard extends JPanel{
 		}
 		this.revalidate();
 	}
+	
+	public void searchRefresh() {
+                pageNumberLabel.setText("Page Number: " + String.format("%d", pageNumber + 1));
+                for (int i = 0; i < notePerPage; i++) {
+                        if (notePerPage * pageNumber + i < filteredData.size()) {
+                                noteBtn.get(i).setNote(filteredData.get(notePerPage*pageNumber+i));
+                                recycleBtn.get(i).setVisible(true);
+                        } else {
+                                noteBtn.get(i).removeHide();
+                                recycleBtn.get(i).setVisible(false);
+                        }
+                }
+                this.revalidate();
+        }
 }
