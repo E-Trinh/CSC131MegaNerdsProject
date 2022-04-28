@@ -16,11 +16,10 @@ public class Search extends JPanel{
         
         //contains a reference to the NotesList list
         private NotesList data;
-        private NotesList filteredData = new NotesList();
+        private ArrayList<Note> filteredData;
         
         //used for storing the two sets of button
         private ArrayList<NoteButton> filteredBtn = new ArrayList<NoteButton>();
-        private ArrayList<Note> filtered;
         
         Font font = new Font("Courier", Font.BOLD, 12);
         
@@ -34,6 +33,7 @@ public class Search extends JPanel{
         public Search(NotesList data) {
                 super();
                 this.data = data;
+                filteredData = new ArrayList<Note>();
                 setupLayout();
                 this.setVisible(true);
         }
@@ -67,15 +67,10 @@ public class Search extends JPanel{
                 //Adds anonymous method for event handling to create a new note
                 searchButton.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                                while (filteredData.size() > 0) {
+                                /*while (filteredData.size() > 0) {
                                         filteredData.directDelete(0);  //for resetting search criteria
-                                }
-                                filtered = data.searchNote(searchBar.getText());
-                                if(filtered != null) {
-                                        for(int i = 0 ; i < filtered.size(); i++) {
-                                                filteredData.addNote(filtered.get(i).getTitle(), filtered.get(i).getText(), null);
-                                        }
-                                }
+                                }*/
+                                filteredData = data.searchNote(searchBar.getText());
                                 refresh();
                         }
                 });

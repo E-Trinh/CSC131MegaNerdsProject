@@ -51,9 +51,9 @@ public class NoteBoard extends JPanel{
 		constraintTitle.gridx = 0;
 		constraintTitle.gridy = 0;
 		constraintTitle.gridheight = 1;
-		constraintTitle.gridwidth = 3;
+		constraintTitle.gridwidth = 4;
 		constraintTitle.weightx = 1;
-		constraintTitle.weighty = 1;
+		constraintTitle.weighty = 0.5;
 		constraintTitle.anchor = GridBagConstraints.PAGE_START;
 		constraintTitle.fill = GridBagConstraints.BOTH;
 		this.add(titleLabel, constraintTitle);
@@ -83,30 +83,57 @@ public class NoteBoard extends JPanel{
 				//if the user presses yes on the dialog box, takes the data from the box and creates a new Note
 				int noteEdit = JOptionPane.showConfirmDialog(null, panel);
 				if (noteEdit == JOptionPane.YES_OPTION) {
-					data.addNote(titleBox.getText(), titleBox.getText(), null);
+					data.addNote(titleBox.getText(), textBox.getText(), null);
 					refresh();
 				}
 			}
 		});
 		
+		//Adding search bar navigation buttons
+        JTextField searchBar = new JTextField();
+        Button searchButton = new Button("Search");
+        Button clearhButton = new Button("Clear");
+		GridBagConstraints searchConstraints = new GridBagConstraints();
+		searchConstraints.gridx = 0;
+		searchConstraints.gridy = 1;
+		searchConstraints.gridheight = 1;
+		searchConstraints.gridwidth = 2;
+		searchConstraints.weightx = 1;
+		searchConstraints.weighty = 0.5;
+		searchConstraints.anchor = GridBagConstraints.LINE_START;
+		searchConstraints.fill = GridBagConstraints.BOTH;
+		this.add(searchBar, searchConstraints);
+		searchConstraints.gridwidth = 1;
+		searchConstraints.gridx = 2;
+		searchConstraints.weightx = 0.075;
+		this.add(searchButton, searchConstraints);
+		searchConstraints.gridx = 3;
+		this.add(clearhButton, searchConstraints);
+		
+        //new note and sort navigation buttons
 		String[] sortMethods = {"A to Z", "Z to A", "Newest", "Oldest"};
 		JComboBox<String> sortBox = new JComboBox<String>(sortMethods);
 		GridBagConstraints constraintNew = new GridBagConstraints();
 		constraintNew.gridx = 0;
-		constraintNew.gridy = 1;
+		constraintNew.gridy = 2;
 		constraintNew.gridheight = 1;
 		constraintNew.gridwidth = 2;
 		constraintNew.weightx = 1;
-		constraintNew.weighty = 1;
+		constraintNew.weighty = 0.5;
 		constraintNew.anchor = GridBagConstraints.LINE_START;
 		constraintNew.fill = GridBagConstraints.BOTH;
 		this.add(newNote, constraintNew);
-		constraintNew.gridwidth = 1;
 		constraintNew.gridx = 2;
 		constraintNew.weightx = 0.15;
 		this.add(sortBox, constraintNew);
 		
-		//instantiating needed buttons
+		sortBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.print("Sorting method selected: " + sortBox.getSelectedItem());
+			}
+		});
+		
+		//buttons for display notes and recycle notes
 		ArrayList<JPanel> buttonPanel = new ArrayList<JPanel>();
 		ArrayList<JPanel> recycleButtonPanel = new ArrayList<JPanel>(); 
 		for (int i = 0; i < notePerPage; i++) {
@@ -130,7 +157,7 @@ public class NoteBoard extends JPanel{
 			recycleButtonPanel.get(i).setLayout(new GridLayout(1,1));
 			GridBagConstraints constraintNoteButton = new GridBagConstraints();
 			constraintNoteButton.gridx = 0;
-			constraintNoteButton.gridy = i+2;
+			constraintNoteButton.gridy = i+3;
 			constraintNoteButton.gridheight = 1;
 			constraintNoteButton.gridwidth = 2;
 			constraintNoteButton.weightx = 1;
@@ -139,7 +166,7 @@ public class NoteBoard extends JPanel{
 			buttonPanel.get(i).add(noteBtn.get(i));
 			this.add(buttonPanel.get(i), constraintNoteButton);
 			constraintNoteButton.gridx = 2;
-			constraintNoteButton.gridwidth = 1;
+			constraintNoteButton.gridwidth = 2;
 			constraintNoteButton.weightx = 0.15;
 			recycleButtonPanel.get(i).add(recycleBtn.get(i));
 			this.add(recycleButtonPanel.get(i), constraintNoteButton);
@@ -168,16 +195,17 @@ public class NoteBoard extends JPanel{
 		});
 		GridBagConstraints pageConstraint = new GridBagConstraints();
 		pageConstraint.gridx = 0;
-		pageConstraint.gridy = 12;
+		pageConstraint.gridy = 13;
 		pageConstraint.gridheight = 1;
 		pageConstraint.gridwidth = 1;
 		pageConstraint.weightx = 1;
-		pageConstraint.weighty = 1;
+		pageConstraint.weighty = 0.5;
 		pageConstraint.fill = GridBagConstraints.BOTH;
 		this.add(previousPage, pageConstraint);
 		pageConstraint.gridx = 1;
 		this.add(forwardPage, pageConstraint);
 		pageConstraint.gridx = 2;
+		pageConstraint.gridwidth = 2;
 		pageConstraint.weightx = 0.15;
 		pageNumberLabel = new Label();
 		pageNumberLabel.setAlignment(Label.CENTER);
@@ -185,6 +213,7 @@ public class NoteBoard extends JPanel{
 		refresh();
 	}
 	
+	//no parameters and return, resets the page number and updates the button
 	public void refresh() {
 		pageNumber = 0;
 		updateButton();

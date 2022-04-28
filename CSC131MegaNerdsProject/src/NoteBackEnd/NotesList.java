@@ -117,6 +117,14 @@ public class NotesList implements Serializable{
 		return false;
 	}
 	
+	//no parameters and no return, removes all previous data
+	public void clearAll() {
+		notes.clear();
+		recycleBin.clear();
+		sortStrategy = new NewToOldSort();
+		path = "data.dat";
+	}
+	
 	//accepts two String and LocalDateTime and returns Boolean, creates a new Note and adds it to the notes list
 	public Boolean addNote(String title, String text, LocalDateTime date) {
 		try {
