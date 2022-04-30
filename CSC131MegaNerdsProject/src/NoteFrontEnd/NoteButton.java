@@ -46,20 +46,66 @@ public class NoteButton extends Button implements ActionListener {
 	//accepts ActionEvent and no return, when the button is clicked opens a dialog box to edit the fields for the button
 	public void actionPerformed(ActionEvent e) {
 		//setting up a panel to pass to dialog box
-		JPanel panel = new JPanel();
+		GridBagLayout dialogLayout = new GridBagLayout();
+		JPanel panel = new JPanel(dialogLayout);
+		panel.setPreferredSize(new Dimension(700,500));
 		JLabel titleLabel = new JLabel("Title:");
 		JLabel textLabel = new JLabel("Text:");
-		JFormattedTextField titleBox = new JFormattedTextField(note.getTitle());
-		titleBox.setPreferredSize(new Dimension(100,100));
+		JLabel dateLabel = new JLabel("Date:");
+		JLabel timeLabel  = new JLabel("Time:");
+		JLabel completedLabel = new JLabel("Complete:");
+		JTextField titleBox = new JTextField(note.getTitle());
 		titleBox.setHorizontalAlignment(JTextField.LEFT);
-		JFormattedTextField textBox = new JFormattedTextField(note.getText());
-		textBox.setPreferredSize(new Dimension(100,100));
-		textBox.setHorizontalAlignment(JTextField.LEFT);
-		panel.add(titleLabel);
-		panel.add(titleBox);
-		panel.add(textLabel);
-		panel.add(textBox);
-		panel.setPreferredSize(new Dimension(500,500));
+		JTextArea textBox = new JTextArea(note.getText());
+		textBox.setLineWrap(true);
+		JTextField dateBox = new JTextField();
+		JTextField timeBox = new JTextField();
+		JCheckBox completedBox = new JCheckBox();
+		JScrollPane textBoxPane = new JScrollPane(textBox);
+		
+		//setting up constraints for panel layout
+		GridBagConstraints constraintDialog = new GridBagConstraints();
+		constraintDialog.gridx = 0;
+		constraintDialog.gridy = 0;
+		constraintDialog.gridheight = 1;
+		constraintDialog.gridwidth = 1;
+		constraintDialog.weightx = 0.25;
+		constraintDialog.weighty = 0.05;
+		constraintDialog.fill = GridBagConstraints.BOTH;
+		panel.add(titleLabel, constraintDialog);
+		constraintDialog.gridy = 2;
+		panel.add(dateLabel, constraintDialog);
+		constraintDialog.gridx = 2;
+		panel.add(timeLabel, constraintDialog);
+		constraintDialog.gridx = 0;
+		constraintDialog.gridy = 1;
+		constraintDialog.weighty = 1;
+		panel.add(textLabel, constraintDialog);
+		constraintDialog.gridx = 1;
+		constraintDialog.gridy = 0;
+		constraintDialog.gridheight = 1;
+		constraintDialog.gridwidth = 3;
+		constraintDialog.weightx = 1;
+		constraintDialog.weighty = 0.05;
+		constraintDialog.weightx = 1;
+		panel.add(titleBox, constraintDialog);
+		constraintDialog.gridy = 2;
+		constraintDialog.gridwidth = 1;
+		panel.add(dateBox, constraintDialog);
+		constraintDialog.gridx = 3;
+		panel.add(timeBox, constraintDialog);
+		constraintDialog.gridwidth = 3;
+		constraintDialog.gridy = 1;
+		constraintDialog.gridx = 1;
+		constraintDialog.weighty = 1;
+		panel.add(textBoxPane, constraintDialog);
+		constraintDialog.gridx = 0;
+		constraintDialog.gridy = 3;
+		constraintDialog.gridwidth = 2;
+		constraintDialog.weighty = 0.05;
+		panel.add(completedLabel, constraintDialog);
+		constraintDialog.gridx = 2;
+		panel.add(completedBox, constraintDialog);
 		
 		//opens a dialog box with fields to allow the user to edit the Note
 		int noteEdit = JOptionPane.showConfirmDialog(this, panel);

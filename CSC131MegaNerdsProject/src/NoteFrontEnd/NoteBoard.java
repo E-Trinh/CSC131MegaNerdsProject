@@ -64,21 +64,58 @@ public class NoteBoard extends JPanel{
 		//Adds anonymous method for event handling to create a new note
 		newNote.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JPanel panel = new JPanel();
-				panel.setLayout(new GridLayout(1,2));
-				
-				//dialog box is too small for the panel, dialog box needs to be resized
-				panel.setSize(1000,1000);
-				
-				//setting up elements in a frame to pass to dialog box
+				//setting up a panel to pass to dialog box
+				GridBagLayout dialogLayout = new GridBagLayout();
+				JPanel panel = new JPanel(dialogLayout);
+				panel.setPreferredSize(new Dimension(700,500));
 				JLabel titleLabel = new JLabel("Title:");
 				JLabel textLabel = new JLabel("Text:");
-				JFormattedTextField titleBox = new JFormattedTextField("");
-				JFormattedTextField textBox = new JFormattedTextField("");
-				panel.add(titleLabel);
-				panel.add(titleBox);
-				panel.add(textLabel);
-				panel.add(textBox);
+				JLabel dateLabel = new JLabel("Date:");
+				JLabel timeLabel  = new JLabel("Time:");
+				JTextField titleBox = new JTextField();
+				titleBox.setHorizontalAlignment(JTextField.LEFT);
+				JTextArea textBox = new JTextArea();
+				textBox.setLineWrap(true);
+				JTextField dateBox = new JTextField();
+				JTextField timeBox = new JTextField();
+				JScrollPane textBoxPane = new JScrollPane(textBox);
+				
+				//setting up constraints for panel layout
+				GridBagConstraints constraintDialog = new GridBagConstraints();
+				constraintDialog.gridx = 0;
+				constraintDialog.gridy = 0;
+				constraintDialog.gridheight = 1;
+				constraintDialog.gridwidth = 1;
+				constraintDialog.weightx = 0.25;
+				constraintDialog.weighty = 0.05;
+				constraintDialog.fill = GridBagConstraints.BOTH;
+				panel.add(titleLabel, constraintDialog);
+				constraintDialog.gridy = 2;
+				panel.add(dateLabel, constraintDialog);
+				constraintDialog.gridx = 2;
+				panel.add(timeLabel, constraintDialog);
+				constraintDialog.gridx = 0;
+				constraintDialog.gridy = 1;
+				constraintDialog.weighty = 1;
+				panel.add(textLabel, constraintDialog);
+				constraintDialog.gridx = 1;
+				constraintDialog.gridy = 0;
+				constraintDialog.gridheight = 1;
+				constraintDialog.gridwidth = 3;
+				constraintDialog.weightx = 1;
+				constraintDialog.weighty = 0.05;
+				constraintDialog.weightx = 1;
+				panel.add(titleBox, constraintDialog);
+				constraintDialog.gridy = 2;
+				constraintDialog.gridwidth = 1;
+				panel.add(dateBox, constraintDialog);
+				constraintDialog.gridx = 3;
+				panel.add(timeBox, constraintDialog);
+				constraintDialog.gridwidth = 3;
+				constraintDialog.gridy = 1;
+				constraintDialog.gridx = 1;
+				constraintDialog.weighty = 1;
+				panel.add(textBoxPane, constraintDialog);
 				
 				//if the user presses yes on the dialog box, takes the data from the box and creates a new Note
 				int noteEdit = JOptionPane.showConfirmDialog(null, panel);
@@ -110,17 +147,17 @@ public class NoteBoard extends JPanel{
 		searchConstraints.gridx = 3;
 		this.add(clearhButton, searchConstraints);
 		searchButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                                filteredData = data.searchNote(searchBar.getText());
-                                searchRefresh();
-                        }
-                });
+			public void actionPerformed(ActionEvent e) {
+				filteredData = data.searchNote(searchBar.getText());
+				searchRefresh();
+				}
+		});
 		clearhButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                                searchBar.setText("");
-                                refresh();
-                        }
-                });
+			public void actionPerformed(ActionEvent e) {
+				searchBar.setText("");
+				refresh();
+			}
+		});
 		
 		//new note and sort navigation buttons
 		String[] sortMethods = {"A to Z", "Z to A", "Newest", "Oldest"};
