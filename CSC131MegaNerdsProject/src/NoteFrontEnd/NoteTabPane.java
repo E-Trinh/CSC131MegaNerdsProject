@@ -15,9 +15,7 @@ public class NoteTabPane extends JTabbedPane implements ChangeListener{
 
 	private NoteBoard noteBoard;
 	private Dashboard dash;
-	private Calendar calendar;
 	private RecyclePane archive;
-	private Search search;
 	private SettingPanel settings;
 	
 	//constructor, accepts reference to NoteList object, creates new instance of NoteTabPane
@@ -25,15 +23,11 @@ public class NoteTabPane extends JTabbedPane implements ChangeListener{
 		//creates and adds new instance of each pane to the instance
 		noteBoard = new NoteBoard(data);
 		dash = new Dashboard(data);
-		calendar = new Calendar(data);
 		archive = new RecyclePane(data);
-		search = new Search(data);
 		settings = new SettingPanel(data);
 		this.add("Dashboard", dash);
 		this.add("Notes", noteBoard);
-		this.add("Calendar", calendar);
 		this.add("Archive", archive);
-		this.add("Search", search);
 		this.add("Settings", settings);
 		this.addChangeListener(this);
 	}
@@ -44,8 +38,6 @@ public class NoteTabPane extends JTabbedPane implements ChangeListener{
 			noteBoard.refresh();
 		} else if (this.getSelectedComponent() instanceof RecyclePane) {
 			archive.refresh();
-		} else if(this.getSelectedComponent() instanceof Search) {
-			search.refresh();
 		}
 	}
 }

@@ -40,11 +40,6 @@ public class NotesList implements Serializable{
 		return recycleBin.get(index);
 	}
 	
-	//no parameters, returns String for the path of the data file
-	public String getPath() {
-		return path;
-	}
-	
 	//no parameters, return Boolean, imports necessary object data to file from variable path
 	public Boolean importNote() {
 		try {
@@ -126,17 +121,11 @@ public class NotesList implements Serializable{
 	}
 	
 	//accepts two String and LocalDateTime and returns Boolean, creates a new Note and adds it to the notes list
-	public Boolean addNote(String title, String text, LocalDateTime date) {
-		try {
-			if (date == null) {
-				notes.add(new Note(title, text));
-			} else {
-				notes.add(new Note(title, text, date));
-			}
-			return true;
-		} catch (Exception e) {
-			System.out.print(e);
-			return false;
+	public void addNote(String title, String text, LocalDateTime date) {
+		if (date == null) {
+			notes.add(new Note(title, text));
+		} else {
+			notes.add(new Note(title, text, date));
 		}
 	}
 	
@@ -191,10 +180,5 @@ public class NotesList implements Serializable{
 	//no parameter, returns an int for the size of the recycleBin list
 	public int recycleBinSize() {
 		return recycleBin.size();
-	}
-	
-	//no parameter, returns an Iterator object for the  notes list
-	public Iterator<Note> iterator() {
-		return notes.iterator();
 	}
 }
