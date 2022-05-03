@@ -2,6 +2,8 @@ package NoteFrontEnd;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+
 import javax.swing.*;
 
 import NoteBackEnd.*;
@@ -44,7 +46,8 @@ public class NoteButton extends Button implements ActionListener {
 	}
 
 	//accepts ActionEvent and no return, when the button is clicked opens a dialog box to edit the fields for the button
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) 
+	{
 		//setting up a panel to pass to dialog box
 		GridBagLayout dialogLayout = new GridBagLayout();
 		JPanel panel = new JPanel(dialogLayout);
@@ -58,9 +61,18 @@ public class NoteButton extends Button implements ActionListener {
 		titleBox.setHorizontalAlignment(JTextField.LEFT);
 		JTextArea textBox = new JTextArea(note.getText());
 		textBox.setLineWrap(true);
-		JTextField dateBox = new JTextField();
-		JTextField timeBox = new JTextField();
+		
+		String day = String.format("%d", note.getDate().getYear()) + "/" + String.format("%02d", note.getDate().getMonth().getValue()) + "/" + String.format("%02d", note.getDate().getDayOfMonth());
+		String time = String.format("%02d", note.getDate().getHour()) + ":" + String.format("%02d", note.getDate().getMinute()) + ":" + String.format("%02d", note.getDate().getSecond());
+		
+		JTextField dateBox = new JTextField(day);	
+		JTextField timeBox = new JTextField(time);
+		
+		
 		JCheckBox completedBox = new JCheckBox();
+		completedBox.setText("");
+		completedBox.setSelected(note.getCompleted());
+		
 		JScrollPane textBoxPane = new JScrollPane(textBox);
 		
 		//setting up constraints for panel layout
@@ -111,9 +123,53 @@ public class NoteButton extends Button implements ActionListener {
 		int noteEdit = JOptionPane.showConfirmDialog(this, panel);
 		
 		//when Yes is selected changes are updated on the reference to the Note object
-		if (noteEdit == JOptionPane.YES_OPTION) {
-			this.note.update(titleBox.getText(), textBox.getText(), null);
+		if (noteEdit == JOptionPane.YES_OPTION) 
+		{
+			String temp = formatString(dateBox.getText(), timeBox.getText());
+			
+			this.note.update(titleBox.getText(), textBox.getText(), temp);
+			
+			if (completedBox.getSelectedObjects() == null) 
+			{
+                this.note.toggleCompletion(false);
+            } 
+			else 
+			{
+                this.note.toggleCompletion(true);
+            }
+			
 			this.setLabel(note.getTitle());
 		}
+	}
+	
+	//2015/10/04
+	//2015-08-04T10:11:30
+	//10:11:30
+	private String formatString(String date, String time) 
+	{
+		String temp = date;
+		String y = time;
+		
+		String temp2 = "";
+		String temp3 = "";
+		String temp4 = "";
+		
+		String temp5 = "";
+		String temp6 = "";
+		String temp7 = "";
+		
+		String result = "";
+
+		temp2 = temp.substring(0,4); //year
+		temp3 = temp.substring(5,7); //month
+		temp4 = temp.substring(8,temp.length()); //day
+		
+		temp5 = y.substring(0,2);//hour
+		temp6 = y.substring(3,5);//minute
+		temp7 = y.substring(6,8);//seconds
+
+		result = temp2 + "-" + temp3 + "-" + temp4 + "T" + temp5 + ":" + temp6 + ":" + temp7;
+
+		return result;
 	}
 }

@@ -121,8 +121,8 @@ public class NotesList implements Serializable{
 	}
 	
 	//accepts two String and LocalDateTime and returns Boolean, creates a new Note and adds it to the notes list
-	public void addNote(String title, String text, LocalDateTime date) {
-		if (date == null) {
+	public void addNote(String title, String text, String date) {
+		if (date.equals("")) {
 			notes.add(new Note(title, text));
 		} else {
 			notes.add(new Note(title, text, date));

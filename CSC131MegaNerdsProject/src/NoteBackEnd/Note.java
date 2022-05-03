@@ -20,10 +20,10 @@ public class Note implements NoteComposite {
 	private Boolean completed;
 	
 	//constructor, accepts 2 String and LocalDateTime, creates a new Note object, package visibility
-	Note(String title, String text, LocalDateTime date) {
+	Note(String title, String text, String date) {
 		this.title = title;
 		this.text = text;
-		this.date = date;
+		this.date = LocalDateTime.parse(date);
 		completed = false;
 		lastModification = LocalDateTime.now();
 		creation = LocalDateTime.now();
@@ -81,15 +81,16 @@ public class Note implements NoteComposite {
 	}
 	
 	//accepts 2 String and LocalDateTime, no return, updates the values of in the instance of Note and updates the last modification time
-	public void update(String title, String text, LocalDateTime date) {
+	public void update(String title, String text, String currentDate) {
 		this.title = title;
 		this.text = text;
-		this.date = date;
+		LocalDateTime temp = LocalDateTime.parse(currentDate);
+		this.date = temp;
 		lastModification = LocalDateTime.now();
 	}
 	
 	//no parameters or return, switches the value of completed
-	public void toggleCompletion() {
-		completed = !completed;
+	public void toggleCompletion(boolean choice) {
+		completed = choice;
 	}
 }
