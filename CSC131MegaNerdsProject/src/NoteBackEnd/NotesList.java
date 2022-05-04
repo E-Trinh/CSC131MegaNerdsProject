@@ -120,6 +120,11 @@ public class NotesList implements Serializable{
 		path = "data.dat";
 	}
 	
+	//accepts String, sets the path to the String
+	public void setPath(String path) {
+		this.path = path;
+	}
+	
 	//accepts two String and LocalDateTime and returns Boolean, creates a new Note and adds it to the notes list
 	public void addNote(String title, String text, String date) {
 		if (date.equals("")) {

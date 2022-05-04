@@ -9,7 +9,7 @@ import java.time.*;
  * Constructor called from the NotesList Class
  */
 
-public class Note implements NoteComposite {
+public class Note {
 	
 	//stored values for Note object
 	private String title;
