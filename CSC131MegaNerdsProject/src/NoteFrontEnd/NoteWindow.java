@@ -25,6 +25,7 @@ public class NoteWindow extends JFrame{
 			
 			public void windowOpened(WindowEvent e) {
 				data.importNote();
+				data.sortNote(new AtoZSort());
 			}
 		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

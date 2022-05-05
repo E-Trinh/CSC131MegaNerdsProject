@@ -180,7 +180,32 @@ public class NoteBoard extends JPanel{
 		
 		sortBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.print("Sorting method selected: " + sortBox.getSelectedItem());
+				
+				if (sortBox.getSelectedItem().equals("Z to A")) {
+					
+					data.sortNote(new ZtoASort());
+					
+				
+				}	else if (sortBox.getSelectedItem().equals("Newest")) {
+					
+					data.sortNote(new NewToOldSort());
+				
+					
+				}	else if (sortBox.getSelectedItem().equals("Oldest")) {
+					
+					data.sortNote(new OldToNewSort());
+					
+				}
+					else if (sortBox.getSelectedItem().equals("A to Z")){
+					
+					data.sortNote(new AtoZSort());
+					
+				}
+					else {
+						
+					data.sortNote(new AtoZSort());
+					}
+				refresh();
 			}
 		});
 		
