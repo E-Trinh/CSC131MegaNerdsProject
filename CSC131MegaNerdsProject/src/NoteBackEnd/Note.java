@@ -1,6 +1,6 @@
 package NoteBackEnd;
 
-import java.time.*;
+import java.time.LocalDateTime;
 
 /* 
  * Note class
@@ -20,10 +20,10 @@ public class Note {
 	private Boolean completed;
 	
 	//constructor, accepts 2 String and LocalDateTime, creates a new Note object, package visibility
-	Note(String title, String text, String date) {
+	Note(String title, String text, LocalDateTime date) {
 		this.title = title;
 		this.text = text;
-		this.date = LocalDateTime.parse(date);
+		this.date = date;
 		completed = false;
 		lastModification = LocalDateTime.now();
 		creation = LocalDateTime.now();
@@ -81,10 +81,10 @@ public class Note {
 	}
 	
 	//accepts 2 String and LocalDateTime, no return, updates the values of in the instance of Note and updates the last modification time
-	public void update(String title, String text, String currentDate) {
+	public void update(String title, String text, LocalDateTime currentDate) {
 		this.title = title;
 		this.text = text;
-		LocalDateTime temp = LocalDateTime.parse(currentDate);
+		LocalDateTime temp = currentDate;
 		this.date = temp;
 		lastModification = LocalDateTime.now();
 	}

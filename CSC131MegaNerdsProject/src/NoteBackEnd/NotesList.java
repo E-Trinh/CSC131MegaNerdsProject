@@ -126,8 +126,8 @@ public class NotesList implements Serializable{
 	}
 	
 	//accepts two String and LocalDateTime and returns Boolean, creates a new Note and adds it to the notes list
-	public void addNote(String title, String text, String date) {
-		if (date.equals("")) {
+	public void addNote(String title, String text, LocalDateTime date) {
+		if (date == null) {
 			notes.add(new Note(title, text));
 		} else {
 			notes.add(new Note(title, text, date));
@@ -161,7 +161,7 @@ public class NotesList implements Serializable{
 		recycleBin.clear();
 	}
 	
-	//method stub, not implemented yet
+	//accepts NoteSort and returns void, sorts the notes based on the sorting strategy
 	public void sortNote(NoteSort sortingStrategy) {
 		this.sortStrategy = sortingStrategy;
 		notes = sortStrategy.sort(notes);

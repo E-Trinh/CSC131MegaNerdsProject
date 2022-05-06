@@ -3,8 +3,10 @@ package NoteFrontEnd;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 import java.util.*;
 import javax.swing.*;
+import DateTimeUtil.*;
 import NoteBackEnd.*;
 
 /*
@@ -42,11 +44,10 @@ public class NoteBoard extends JPanel{
 	public void setupLayout() {
 		//set frame to use GridBagLayout
 		this.setLayout(new GridBagLayout());
-		GridBagConstraints constraintTitle = new GridBagConstraints();
 		
-		//Setting up components
 		//Title Label component
 		Label titleLabel = new Label("Notes");
+		GridBagConstraints constraintTitle = new GridBagConstraints();
 		titleLabel.setBackground(Color.yellow);
 		constraintTitle.gridx = 0;
 		constraintTitle.gridy = 0;
@@ -64,65 +65,14 @@ public class NoteBoard extends JPanel{
 		//Adds anonymous method for event handling to create a new note
 		newNote.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//setting up a panel to pass to dialog box
-				GridBagLayout dialogLayout = new GridBagLayout();
-				JPanel panel = new JPanel(dialogLayout);
-				panel.setPreferredSize(new Dimension(700,500));
-				JLabel titleLabel = new JLabel("Title:");
-				JLabel textLabel = new JLabel("Text:");
-				JLabel dateLabel = new JLabel("Date:");
-				JLabel timeLabel  = new JLabel("Time:");
-				JTextField titleBox = new JTextField();
-				titleBox.setHorizontalAlignment(JTextField.LEFT);
-				JTextArea textBox = new JTextArea();
-				textBox.setLineWrap(true);
-				JTextField dateBox = new JTextField();
-				JTextField timeBox = new JTextField();
-				JScrollPane textBoxPane = new JScrollPane(textBox);
-				
-				//setting up constraints for panel layout
-				GridBagConstraints constraintDialog = new GridBagConstraints();
-				constraintDialog.gridx = 0;
-				constraintDialog.gridy = 0;
-				constraintDialog.gridheight = 1;
-				constraintDialog.gridwidth = 1;
-				constraintDialog.weightx = 0.25;
-				constraintDialog.weighty = 0.05;
-				constraintDialog.fill = GridBagConstraints.BOTH;
-				panel.add(titleLabel, constraintDialog);
-				constraintDialog.gridy = 2;
-				panel.add(dateLabel, constraintDialog);
-				constraintDialog.gridx = 2;
-				panel.add(timeLabel, constraintDialog);
-				constraintDialog.gridx = 0;
-				constraintDialog.gridy = 1;
-				constraintDialog.weighty = 1;
-				panel.add(textLabel, constraintDialog);
-				constraintDialog.gridx = 1;
-				constraintDialog.gridy = 0;
-				constraintDialog.gridheight = 1;
-				constraintDialog.gridwidth = 3;
-				constraintDialog.weightx = 1;
-				constraintDialog.weighty = 0.05;
-				constraintDialog.weightx = 1;
-				panel.add(titleBox, constraintDialog);
-				constraintDialog.gridy = 2;
-				constraintDialog.gridwidth = 1;
-				panel.add(dateBox, constraintDialog);
-				constraintDialog.gridx = 3;
-				panel.add(timeBox, constraintDialog);
-				constraintDialog.gridwidth = 3;
-				constraintDialog.gridy = 1;
-				constraintDialog.gridx = 1;
-				constraintDialog.weighty = 1;
-				panel.add(textBoxPane, constraintDialog);
+				//panel containing the components and layout for the dialog box
+				NoteDialogPanel dialogPanel = new NoteDialogPanel();
 				
 				//if the user presses yes on the dialog box, takes the data from the box and creates a new Note
-				int noteEdit = JOptionPane.showConfirmDialog(null, panel);
+				int noteEdit = JOptionPane.showConfirmDialog(null, dialogPanel);
 				if (noteEdit == JOptionPane.YES_OPTION) {
-					String temp = formatString(dateBox.getText(), timeBox.getText());
-					
-					data.addNote(titleBox.getText(), textBox.getText(), temp);
+					LocalDateTime temp = DateTimeUtil.dateTimeStringParse(dialogPanel.getDate(), dialogPanel.getTime());
+					data.addNote(dialogPanel.getTitle(), dialogPanel.getText(), temp);
 					refresh();
 				}
 			}
@@ -161,7 +111,7 @@ public class NoteBoard extends JPanel{
 			}
 		});
 		
-		//new note and sort navigation buttons
+		// create new note and sort navigation buttons
 		String[] sortMethods = {"A to Z", "Z to A", "Newest", "Oldest"};
 		JComboBox<String> sortBox = new JComboBox<String>(sortMethods);
 		GridBagConstraints constraintNew = new GridBagConstraints();
@@ -177,34 +127,19 @@ public class NoteBoard extends JPanel{
 		constraintNew.gridx = 2;
 		constraintNew.weightx = 0.15;
 		this.add(sortBox, constraintNew);
-		
 		sortBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				if (sortBox.getSelectedItem().equals("Z to A")) {
-					
+				if (sortBox.getSelectedItem().equals("Z to A")) {	
 					data.sortNote(new ZtoASort());
-					
-				
-				}	else if (sortBox.getSelectedItem().equals("Newest")) {
-					
+				} else if (sortBox.getSelectedItem().equals("Newest")) {
 					data.sortNote(new NewToOldSort());
-				
-					
-				}	else if (sortBox.getSelectedItem().equals("Oldest")) {
-					
+				} else if (sortBox.getSelectedItem().equals("Oldest")) {
 					data.sortNote(new OldToNewSort());
-					
-				}
-					else if (sortBox.getSelectedItem().equals("A to Z")){
-					
+				} else if (sortBox.getSelectedItem().equals("A to Z")){
 					data.sortNote(new AtoZSort());
-					
-				}
-					else {
-						
+				} else {
 					data.sortNote(new AtoZSort());
-					}
+				}
 				refresh();
 			}
 		});
@@ -310,45 +245,18 @@ public class NoteBoard extends JPanel{
 		this.revalidate();
 	}
 	
+	//returns and accepts void, used for refreshing what the buttons displays when searching
 	public void searchRefresh() {
-                pageNumberLabel.setText("Page Number: " + String.format("%d", pageNumber + 1));
-                for (int i = 0; i < notePerPage; i++) {
-                        if (notePerPage * pageNumber + i < filteredData.size()) {
-                                noteBtn.get(i).setNote(filteredData.get(notePerPage*pageNumber+i));
-                                recycleBtn.get(i).setVisible(true);
-                        } else {
-                                noteBtn.get(i).removeHide();
-                                recycleBtn.get(i).setVisible(false);
-                        }
-                }
-                this.revalidate();
-        }
-	
-	private String formatString(String date, String time) 
-	{
-		String temp = date;
-		String y = time;
-		
-		String temp2 = "";
-		String temp3 = "";
-		String temp4 = "";
-		
-		String temp5 = "";
-		String temp6 = "";
-		String temp7 = "";
-		
-		String result = "";
-
-		temp2 = temp.substring(0,4); //year
-		temp3 = temp.substring(5,7); //month
-		temp4 = temp.substring(8,temp.length()); //day
-		
-		temp5 = y.substring(0,2);//hour
-		temp6 = y.substring(3,5);//minute
-		temp7 = y.substring(6,8);//seconds
-
-		result = temp2 + "-" + temp3 + "-" + temp4 + "T" + temp5 + ":" + temp6 + ":" + temp7;
-
-		return result;
+		pageNumberLabel.setText("Page Number: " + String.format("%d", pageNumber + 1));
+		for (int i = 0; i < notePerPage; i++) {
+			if (notePerPage * pageNumber + i < filteredData.size()) {
+					noteBtn.get(i).setNote(filteredData.get(notePerPage*pageNumber+i));
+					recycleBtn.get(i).setVisible(true);
+				} else {
+					noteBtn.get(i).removeHide();
+					recycleBtn.get(i).setVisible(false);
+				}
+			}
+		this.revalidate();
 	}
 }

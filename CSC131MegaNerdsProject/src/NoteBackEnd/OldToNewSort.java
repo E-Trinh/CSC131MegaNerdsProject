@@ -2,27 +2,31 @@ package NoteBackEnd;
 
 import java.util.ArrayList;
 
+/*
+ * Class: OldToNewSort
+ * Implements the NoteSort interface strategy
+ * Sorts the notes in from oldest to newest order
+ */
+
 public class OldToNewSort implements NoteSort{
+	
+	//accepts and returns an ArrayList of Notes that is sorted from oldest to newest
 	@Override
 	public ArrayList<Note> sort(ArrayList<Note> notes) {
-		return compare(notes);
-	}
-
-	private ArrayList<Note> compare(ArrayList<Note> toSort) {
 		Note noteTemp;
-																													// check if passed arraylist is larger than 1
-			for (int i = 0; i < toSort.size() - 1; i++) {																// outer loop of bubble sort
-				for( int j = 0; j < toSort.size() - i - 1; j++) {													// inner loop of bubble sort
-					if (toSort.get(j).getModification().isBefore(toSort.get(j+1).getModification()))					// if last modification date of note1 is after than last mod date of note2
-					{
-						noteTemp = toSort.get(j);												
-						toSort.set(j, toSort.get(j+1));
-						toSort.set(j+1, noteTemp);
-					}
+		//outer loop of bubble sort
+		for (int i = 0; i < notes.size() - 1; i++) {
+			//inner loop of bubble sort
+			for( int j = 0; j < notes.size() - i - 1; j++) {
+				//if last modification date of note1 is after than last modification date of note2
+				if (notes.get(j).getModification().isBefore(notes.get(j+1).getModification())) {
+					noteTemp = notes.get(j);												
+					notes.set(j, notes.get(j+1));
+					notes.set(j+1, noteTemp);
 				}
-			
-
 			}
-			return toSort;																							// return sorted arraylist
+		}
+		// return sorted arraylist
+		return notes;
 	}
 }

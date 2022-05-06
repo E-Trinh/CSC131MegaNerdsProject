@@ -2,28 +2,31 @@ package NoteBackEnd;
 
 import java.util.ArrayList;
 
+/*
+ * Class: ZtoaASort
+ * Implements the NoteSort interface strategy
+ * Sorts the notes in the ZtoA order
+ */
+
 public class ZtoASort implements NoteSort{
+	
+	//accepts and returns an ArrayList of Notes that is sorted from A to Z
 	@Override
 	public ArrayList<Note> sort(ArrayList<Note> notes) {
-		return compare(notes);
-	}
-	
-	public ArrayList<Note> compare(ArrayList<Note> toSort) {
 		Note noteTemp;
-		
-																													// check if passed arraylist is larger than 1
-			for (int i = 0; i < toSort.size() - 1; i++) {															// outer loop of bubble sort
-				for( int j = 0; j < toSort.size() - i - 1; j++) {													// inner loop of bubble sort
-					if (toSort.get(j).getTitle().compareTo(toSort.get(j+1).getTitle()) < 0)							// if note1 comes before note2 alphabetically
-					{
-						noteTemp = toSort.get(j);												
-						toSort.set(j, toSort.get(j+1));
-						toSort.set(j+1, noteTemp);
-					}
+		//outer loop of bubble sort
+		for (int i = 0; i < notes.size() - 1; i++) {
+			//inner loop of bubble sort
+			for( int j = 0; j < notes.size() - i - 1; j++) {
+				//if note1 comes before note2 alphabetically
+				if (notes.get(j).getTitle().compareTo(notes.get(j+1).getTitle()) < 0) {
+					noteTemp = notes.get(j);												
+					notes.set(j, notes.get(j+1));
+					notes.set(j+1, noteTemp);
 				}
-			
-
 			}
-			return toSort;																							// return sorted arraylist
+		}
+		//return sorted arraylist
+		return notes;
 	}
-	}
+}

@@ -4,8 +4,7 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
+import DateTimeUtil.*;
 import NoteBackEnd.*;
 
 public class NotesListTest {
@@ -17,13 +16,14 @@ public class NotesListTest {
 		NotesList data = new NotesList();
 		String title = "test case title";
 		String text = "test case text";
-		data.addNote(title, text, "2015-08-04T10:11:30");
+		LocalDateTime date = DateTimeUtil.dateTimeStringParse("2015/08/04", "10:11:30");
+		data.addNote(title, text, date);
 		assertEquals("data.get(0).getTitle()", title, data.get(0).getTitle());
 		assertEquals("data.get(0).geText()", text, data.get(0).getText());
 		//testing the update method
 		title = "test case 2 title";
 		text = "test case 2 text";
-		data.get(0).update(title, text, "2015-08-04T10:11:30");
+		data.get(0).update(title, text, date);
 		assertEquals("Update: data.get(0).getTitle()", title, data.get(0).getTitle());
 		assertEquals("Update: data.get(0).geText()", text, data.get(0).getText());
 	}
@@ -35,20 +35,21 @@ public class NotesListTest {
 		NotesList data = new NotesList();
 		String title = "test case title";
 		String text = "test case text";
-		data.addNote(title, text, "2015-08-04T10:11:30");
+		LocalDateTime date = DateTimeUtil.dateTimeStringParse("2015/08/04", "10:11:30");
+		data.addNote(title, text, date);
 		data.recycleNote(0);
 		assertEquals("data.recycleBinGet(0).getTitle()", title, data.recycleBinGet(0).getTitle());
 		//testing the restore method
 		data.restoreNote(0);
 		assertEquals("data.Get(0).getTitle()", title, data.get(0).getTitle());
 		//testing the delete methods
-		data.addNote(title, text, "2015-08-04T10:11:30");
+		data.addNote(title, text, date);
 		data.recycleNote(0);
 		data.delete(0);
 		data.directDelete(0);
 		assertEquals("data.size()", 0, data.size());
 		assertEquals("data.recycleBinSize()", 0, data.recycleBinSize());
-		data.addNote(title, text, "2015-08-04T10:11:30");
+		data.addNote(title, text, date);
 		data.recycleNote(0);
 		data.deleteAll();
 		assertEquals("data.deleteAll()", 0, data.recycleBinSize());
@@ -61,10 +62,9 @@ public class NotesListTest {
 		String title = "test case title";
 		String text = "test case text";
 		NotesList data = new NotesList();
-		String date = "2015-08-04T10:11:30";
 		LocalDateTime date2 = LocalDateTime.parse("2015-08-04T10:11:30");
-		data.addNote(title, text, date);
-		data.addNote(title, text, date);
+		data.addNote(title, text, date2);
+		data.addNote(title, text, date2);
 		data.recycleNote(1);
 		//exporting notes
 		data.exportNote();
@@ -91,10 +91,11 @@ public class NotesListTest {
 		//Checking the import and export methods
 		NotesList data = new NotesList();
 		String key = "test";
-		data.addNote("test", "String", "2015-08-04T10:11:30");
-		data.addNote("testtest", "String", "2015-08-04T10:11:30");
-		data.addNote("testtesttest", "String", "2015-08-04T10:11:30");
-		data.addNote("no", "String", "2015-08-04T10:11:30");
+		LocalDateTime date = DateTimeUtil.dateTimeStringParse("2015/08/04", "10:11:30");
+		data.addNote("test", "String", date);
+		data.addNote("testtest", "String", date);
+		data.addNote("testtesttest", "String", date);
+		data.addNote("no", "String", date);
 		//testing search method with a key
 		assertEquals("data.searchNote(key).size()", 3, data.searchNote(key).size());
 		//testing search  method when no key is present
