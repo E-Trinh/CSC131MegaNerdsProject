@@ -1,5 +1,9 @@
 package NoteFrontEnd;
 
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -30,6 +34,9 @@ public class NoteTabPane extends JTabbedPane implements ChangeListener{
 		this.add("Archive", archive);
 		this.add("Settings", settings);
 		this.addChangeListener(this);
+		this.setBorder(BorderFactory.createEmptyBorder());
+		this.setBackground(new Color(254, 249, 254));
+		this.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 	}
 
 	//refreshing the panes within the NoteTabPane instance whenever the tab is switched

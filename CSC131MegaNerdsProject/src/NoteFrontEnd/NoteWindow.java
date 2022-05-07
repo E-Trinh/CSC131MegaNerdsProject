@@ -37,6 +37,8 @@ public class NoteWindow extends JFrame{
 		this.setSize(750, 750);
 		Container notePane;
 		notePane = getContentPane();
+		notePane.setBackground(new Color(41, 41, 41));
+
 		this.setLayout(new BorderLayout());
 		NoteTabPane tabPane = new NoteTabPane(data);
 		notePane.add(tabPane);

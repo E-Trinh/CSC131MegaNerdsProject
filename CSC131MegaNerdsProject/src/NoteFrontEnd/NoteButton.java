@@ -1,6 +1,5 @@
 package NoteFrontEnd;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDateTime;
 import DateTimeUtil.*;
@@ -12,7 +11,7 @@ import NoteBackEnd.*;
  * NoteButton extends button implements ActionListener
  */
 
-public class NoteButton extends Button implements ActionListener {
+public class NoteButton extends JButton implements ActionListener {
 	
 	//reference to the Note object the button corresponds with
 	private Note note;
@@ -22,20 +21,13 @@ public class NoteButton extends Button implements ActionListener {
 		super();
 		this.addActionListener(this);
 		this.setVisible(false);
-	}
-	
-	//constructor, accepts reference to Note object
-	public NoteButton(Note note) {
-		super();
-		this.note = note;
-		this.setLabel(note.getTitle());
-		this.addActionListener(this);
+		this.setAlignmentX(CENTER_ALIGNMENT);
 	}
 	
 	//accepts Note and no return, setter method
 	public void setNote(Note note) {
 		this.note = note;
-		this.setLabel(note.getTitle());
+		this.setText(note.getTitle());
 		this.setVisible(true);
 	}
 	
@@ -54,6 +46,7 @@ public class NoteButton extends Button implements ActionListener {
 		//opens a dialog box with fields to allow the user to edit the Note
 		int noteEdit = JOptionPane.showConfirmDialog(this, panel);
 		
+		
 		//when Yes is selected changes are updated on the reference to the Note object
 		if (noteEdit == JOptionPane.YES_OPTION)  {
 			LocalDateTime temp = DateTimeUtil.dateTimeStringParse(panel.getDate(), panel.getTime());	
@@ -64,7 +57,7 @@ public class NoteButton extends Button implements ActionListener {
 			else {
                 this.note.toggleCompletion(true);
             }
-			this.setLabel(note.getTitle());
+			this.setText(note.getTitle());
 		}
 	}
 }
