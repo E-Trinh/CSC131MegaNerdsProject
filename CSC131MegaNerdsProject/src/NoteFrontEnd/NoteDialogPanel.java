@@ -37,10 +37,6 @@ public class NoteDialogPanel extends JPanel {
 		
 		//setting the layout manager for the panel
 		GridBagLayout dialogLayout = new GridBagLayout();
-		this.setLayout(dialogLayout);
-		
-		//editing properties of the panel
-		this.setBackground(new Color(41, 41, 41));
 		
 		//creating and initializing components
 		JLabel titleLabel = new JLabel("Title:");

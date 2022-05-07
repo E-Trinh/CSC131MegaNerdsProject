@@ -49,7 +49,7 @@ public class RecyclePane extends JPanel{
 		this.setBorder(BorderFactory.createEmptyBorder());
 		
 		//Setting up elements
-		Label titleLabel = new Label("Notes");
+		Label titleLabel = new Label("Archive");
 		titleLabel.setBackground(new Color(224, 164, 97));
 		titleLabel.setForeground(new Color(102, 102, 102));
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
