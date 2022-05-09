@@ -4,35 +4,32 @@ import java.time.LocalDateTime;
 
 /*
  * Class: DateTimeUtil
- * Provides helper methods related to Date and Time
+ * Provides helper methods related to LocalDateTime
  */
 
 public class DateTimeUtil {
 	
 	//accepts two Strings and returns a LocalDateTime
 	public static LocalDateTime dateTimeStringParse(String date, String time) {
-		String temp = date;
-		String y = time;
+		String year = "";
+		String month = "";
+		String day = "";
 			
-		String temp2 = "";
-		String temp3 = "";
-		String temp4 = "";
-			
-		String temp5 = "";
-		String temp6 = "";
-		String temp7 = "";
+		String hour = "";
+		String minute = "";
+		String second = "";
 			
 		String result = "";
 		try {
-			temp2 = temp.substring(0,4); //year
-			temp3 = temp.substring(5,7); //month
-			temp4 = temp.substring(8,temp.length()); //day
+			year = date.substring(0,4); //year
+			month = date.substring(5,7); //month
+			day = date.substring(8,date.length()); //day
 			
-			temp5 = y.substring(0,2);//hour
-			temp6 = y.substring(3,5);//minute
-			temp7 = y.substring(6,8);//seconds
+			hour = time.substring(0,2);//hour
+			minute = time.substring(3,5);//minute
+			second = time.substring(6,8);//seconds
 
-			result = temp2 + "-" + temp3 + "-" + temp4 + "T" + temp5 + ":" + temp6 + ":" + temp7;
+			result = year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second;
 		
 			return LocalDateTime.parse(result);
 		} catch (Exception e) {

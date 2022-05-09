@@ -37,6 +37,7 @@ public class NoteDialogPanel extends JPanel {
 		
 		//setting the layout manager for the panel
 		GridBagLayout dialogLayout = new GridBagLayout();
+		this.setLayout(dialogLayout);
 		
 		//creating and initializing components
 		JLabel titleLabel = new JLabel("Title:");
@@ -86,6 +87,17 @@ public class NoteDialogPanel extends JPanel {
 		constraintDialog.gridx = 1;
 		constraintDialog.weighty = 1;
 		this.add(textBoxPane, constraintDialog);
+		
+		//formatting labels to tell the user the format for date and time
+		Label dateFormat = new Label("Format: YYYY/MM/DD");
+		Label timeFormat = new Label("Time: HH:MM:SS");
+		GridBagConstraints formatConstraint = new GridBagConstraints();
+		formatConstraint.gridx = 1;
+		formatConstraint.gridy = 3;
+		formatConstraint.fill = GridBagConstraints.BOTH;
+		this.add(dateFormat, formatConstraint);
+		formatConstraint.gridx = 3;
+		this.add(timeFormat, formatConstraint);
 	}
 	
 	//Note parameter, no return, sets the fields of the components to the data in the passed Note and adds the check box for completion
@@ -97,7 +109,7 @@ public class NoteDialogPanel extends JPanel {
 		GridBagConstraints constraintCheckBox = new GridBagConstraints();
 		constraintCheckBox.fill = GridBagConstraints.BOTH;
 		constraintCheckBox.gridx = 0;
-		constraintCheckBox.gridy = 3;
+		constraintCheckBox.gridy = 4;
 		constraintCheckBox.gridheight = 1;
 		constraintCheckBox.gridwidth = 2;
 		constraintCheckBox.weightx = 1;

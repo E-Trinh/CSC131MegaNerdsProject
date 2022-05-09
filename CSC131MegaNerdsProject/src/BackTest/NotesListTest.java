@@ -102,4 +102,44 @@ public class NotesListTest {
 		key = "";
 		assertEquals("data.searchNote(key).size()", 0, data.searchNote(key).size());
 	}
+	
+	//Checking the A to Z sorting method
+	@Test
+	public void noteAZSortTest() {
+		NotesList sorted = new NotesList();
+		NotesList toSort = new NotesList();
+		//Adding notes to both list
+		sorted.addNote("A", "Note A", null);
+		sorted.addNote("M", "Note M", null);
+		sorted.addNote("Z", "Note Z", null);
+		toSort.addNote("M", "Note M", null);
+		toSort.addNote("Z", "Note Z", null);
+		toSort.addNote("A", "Note A", null);
+		//Sorting toSort from A to Z
+		toSort.sortNote(new AtoZSort());
+		//Testing if the titles in both notes match up after sorting
+		for (int i = 0; i < sorted.size(); i++) {
+			assertEquals("toSort.get(i).get(title)" + i,sorted.get(i).getTitle(), toSort.get(i).getTitle());
+		}
+	}
+	
+	//Checking the Z to A sorting method
+	@Test
+	public void noteZASortTest() {
+		NotesList sorted = new NotesList();
+		NotesList toSort = new NotesList();
+		//Adding notes to both list
+		sorted.addNote("Z", "Note Z", null);
+		sorted.addNote("M", "Note M", null);
+		sorted.addNote("A", "Note A", null);
+		toSort.addNote("M", "Note M", null);
+		toSort.addNote("Z", "Note Z", null);
+		toSort.addNote("A", "Note A", null);
+		//Sorting toSort from A to Z
+		toSort.sortNote(new ZtoASort());
+		//Testing if the titles in both notes match up after sorting
+		for (int i = 0; i < sorted.size(); i++) {
+			assertEquals("toSort.get(i).get(title)" + i,sorted.get(i).getTitle(), toSort.get(i).getTitle());
+		}
+	}
 }
