@@ -4,6 +4,9 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import NoteBackEnd.*;
+import DateTimeUtil.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class Dashboard extends JPanel{
@@ -101,9 +104,13 @@ public class Dashboard extends JPanel{
         }
 	}
 	
-	public void refresh() {
+	public void refresh() { 
+		
+		LocalDateTime current = data.get(0).getDate();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		String fixedDate = current.format(formatter);
 		upcomingNoteTitle.get(0).setText(data.get(0).getTitle());
-		upcomingNoteDate.get(0).setText(data.get(0).getDate());
+		upcomingNoteDate.get(0).setText(fixedDate);
 	}
 }
 
