@@ -102,7 +102,8 @@ public class Dashboard extends JPanel{
 	}
 	
 	public void refresh() {
-
+		upcomingNoteTitle.get(0).setText(data.get(0).getTitle());
+		upcomingNoteDate.get(0).setText(data.get(0).getDate());
 	}
 }
 
