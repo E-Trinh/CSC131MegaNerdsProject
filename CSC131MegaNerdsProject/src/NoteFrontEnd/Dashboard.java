@@ -4,30 +4,40 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import NoteBackEnd.*;
-import DateTimeUtil.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/*
+ * NoteTabPane extend JPanel
+ * Contains a dashboard view for the user showing upcoming and unfinished notes
+ */
 
 public class Dashboard extends JPanel{
+	//contains a reference to the main list of notes
 	private NotesList data;
 	
+	//java swing components that need to be accesed by all methods
 	private ArrayList<Label> upcomingNoteTitle = new ArrayList<Label>();
 	private ArrayList<Label> incompleteNoteTitle = new ArrayList<Label>();;
 	private ArrayList<Label> upcomingNoteDate = new ArrayList<Label>();;
 	private ArrayList<Label> incompleteNoteDate = new ArrayList<Label>();;
 	
+	//constructor, accepts a reference the NotesList object
 	public Dashboard(NotesList data) {
 		this.data = data;
 		setupLayout();
 	}
 	
+	//no parameter and return, sets up the components onto the panel
 	public void setupLayout() {
+		//setting up layout manager
 		this.setLayout(new GridBagLayout());
 
+		//changing visual properties of the panel
 		this.setBackground(new Color(41, 41, 41));
 		this.setBorder(BorderFactory.createEmptyBorder());
 		
+		//adding the title components the panel
 		GridBagConstraints labelConstraints = new GridBagConstraints();
         Label titleLabel = new Label("Dashboard");
 		titleLabel.setBackground(new Color(224, 164, 97));
@@ -59,11 +69,12 @@ public class Dashboard extends JPanel{
         this.add(incompleteLabel, labelConstraints);
         
         
+        //adding the date and time labels for notes into the panel
         for (int i = 0; i < 4; i++) {
-        	upcomingNoteTitle.add(new Label("Date"));
+        	upcomingNoteTitle.add(new Label(""));
         	upcomingNoteTitle.get(i).setBackground(new Color(254, 249, 254));
         	upcomingNoteTitle.get(i).setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
-        	upcomingNoteDate.add(new Label("Text"));
+        	upcomingNoteDate.add(new Label(""));
         	upcomingNoteDate.get(i).setBackground(new Color(254, 249, 254));
         	upcomingNoteDate.get(i).setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
     		GridBagConstraints upcomingConstraints = new GridBagConstraints();
@@ -102,15 +113,62 @@ public class Dashboard extends JPanel{
     		incompleteConstraints.insets = new Insets(2, 0, 2, 10);
     		this.add(incompleteNoteTitle.get(i), incompleteConstraints);
         }
+        
+		refresh();
 	}
 	
+	//no return and parameter, displays the notes to the user
 	public void refresh() { 
+		//accumulator to keep track of how many notes displayed to the user
+		int incompleteAccumulator = 0;
+		int upcomingAcculumulator = 0;
 		
-		LocalDateTime current = data.get(0).getDate();
+		//format for converting LocalDateTime to String
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		String fixedDate = current.format(formatter);
-		upcomingNoteTitle.get(0).setText(data.get(0).getTitle());
-		upcomingNoteDate.get(0).setText(fixedDate);
+		
+		//iterates through the list of notes displaying notes to the user
+		for (int i = 0; i < data.size(); i++) {
+			//checks if date is null
+			if (data.get(i).getDate() != null) {
+				//if the current note at the index has a date set after the current date, add the date and title to the labels in the panel
+				if (data.get(i).getDate().isAfter(LocalDateTime.now()) && upcomingAcculumulator < 4) {
+					upcomingNoteTitle.get(upcomingAcculumulator).setText(data.get(i).getTitle());
+					LocalDateTime current = data.get(i).getDate();
+					String fixedDate = current.format(formatter);
+					upcomingNoteDate.get(upcomingAcculumulator).setText(fixedDate);
+					upcomingAcculumulator++;
+				}
+			}
+			//if the current note at the index is incomplete, add the date and title to the labels in the panel
+			if (data.get(i).getCompleted() == false && incompleteAccumulator < 4) {
+				incompleteNoteTitle.get(incompleteAccumulator).setText(data.get(i).getTitle());
+				//checks if date is null
+				if (data.get(0).getDate() != null ) {
+					LocalDateTime current = data.get(i).getDate();
+					String fixedDate = current.format(formatter);
+					incompleteNoteDate.get(incompleteAccumulator).setText(fixedDate);
+				} else {
+					incompleteNoteDate.get(incompleteAccumulator).setText("");
+				}
+				incompleteAccumulator++;
+			}
+			//Once 4 incomplete and upcoming notes are found, exit the loop
+			if (incompleteAccumulator == 4 && upcomingAcculumulator == 4) {
+				break;
+			}
+		}
+		
+		//iterates through the number of notes that can be shown and removes the text from labels that do not have a note
+		for (int i = 0; i < 4; i++) {
+			if (i >= upcomingAcculumulator) {
+				upcomingNoteTitle.get(i).setText("");
+				upcomingNoteDate.get(i).setText("");
+			}
+			if (i >= incompleteAccumulator) {
+				incompleteNoteTitle.get(i).setText("");
+				incompleteNoteDate.get(i).setText("");
+			}
+		}
 	}
 }
 

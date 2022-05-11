@@ -18,8 +18,8 @@ public class NewToOldSort implements NoteSort{
 		for (int i = 0; i < notes.size() - 1; i++) {
 			//inner loop of bubble sort
 			for(int j = 0; j < notes.size() - i - 1; j++) {
-				// if last modification date of note1 is after than last modification date of note2
-				if (notes.get(j).getModification().isAfter(notes.get(j+1).getModification())) {
+				// if last modification date of note1 is before than last modification date of note2
+				if (notes.get(j).getModification().isBefore(notes.get(j+1).getModification())) {
 					noteTemp = notes.get(j);												
 					notes.set(j, notes.get(j+1));
 					notes.set(j+1, noteTemp);

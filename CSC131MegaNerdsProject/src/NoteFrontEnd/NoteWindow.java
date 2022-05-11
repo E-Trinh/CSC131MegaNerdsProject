@@ -18,14 +18,11 @@ public class NoteWindow extends JFrame{
 	public NoteWindow() {
 		super();
 		this.data = new NotesList();
+		data.importNote();
+		data.sortNote(new AtoZSort());
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				data.exportNote();
-			}
-			
-			public void windowOpened(WindowEvent e) {
-				data.importNote();
-				data.sortNote(new AtoZSort());
 			}
 		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,7 +36,7 @@ public class NoteWindow extends JFrame{
 		notePane = getContentPane();
 		this.setTitle("Note App");
 		notePane.setBackground(new Color(41, 41, 41));
-
+		
 		this.setLayout(new BorderLayout());
 		NoteTabPane tabPane = new NoteTabPane(data);
 		notePane.add(tabPane);
