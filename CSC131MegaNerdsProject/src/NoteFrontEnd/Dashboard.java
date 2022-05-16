@@ -143,7 +143,7 @@ public class Dashboard extends JPanel{
 			if (data.get(i).getCompleted() == false && incompleteAccumulator < 4) {
 				incompleteNoteTitle.get(incompleteAccumulator).setText(data.get(i).getTitle());
 				//checks if date is null
-				if (data.get(0).getDate() != null ) {
+				if (data.get(i).getDate() != null ) {
 					LocalDateTime current = data.get(i).getDate();
 					String fixedDate = current.format(formatter);
 					incompleteNoteDate.get(incompleteAccumulator).setText(fixedDate);
